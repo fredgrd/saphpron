@@ -38,6 +38,20 @@ class RecipeController extends Controller
         ], 200);
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function search(string $keyword)
+    {
+        $decodedKeyword = urldecode($keyword);
+        $recipes = Recipe::where(function ($query) use ($decodedKeyword) {
+            $query->where('name', 'ilike', '%' . $decodedKeyword . '%')
+                ->orWhere('description', 'ilike', '%' . $decodedKeyword . '%');
+        })->get();
+
+        return $recipes;
+    }
+
     // RECIPE -------------------------------------------------------------------------
 
     /**
