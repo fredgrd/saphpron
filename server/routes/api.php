@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\IngredientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +19,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/signup', [AuthController::class, 'signup']);
 
-Route::get('/recipes', function (Request $request) {
+// Protected routes
+Route::group(['middleware'=>['auth:sanctum']], function (){
+    // Recipes
+    Route::post('/recipes', [RecipeController::class, 'store']);
 
+    // Ingredients
+    Route::post('/ingredients', [IngredientController::class, 'store']);
+});
+
+Route::get('/recipes', function (Request $request) {
     return $request->value;
 });
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

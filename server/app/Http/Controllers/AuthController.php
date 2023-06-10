@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -24,10 +25,39 @@ class AuthController extends Controller
         $token = $user->createToken('saphpron_auth_token')->plainTextToken;
 
         $response = [
-            'user'=>$user,
-            'token'=>$token,
+            'user' => $user,
+            'token' => $token,
         ];
 
         return response($response, 201);
+    }
+
+    public function signin(Request $request)
+    {
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
+
+        // Retrieve the user from email
+        $user = User::where('email', $fields['email'])->first();
+
+        if (!$user) {
+            return response(['message' => 'Your credentials do not match!'], 401);
+        }
+
+        // Check for password match
+        if (!Hash::check($fields['password'], $user->password)) {
+            return response(['message' => 'Wrong password'], 401);
+        }
+    }
+
+    public function signout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return [
+            'message' => 'Logged out'
+        ];
     }
 }
