@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 
 class IngredientController extends Controller
 {
+    public function showAll(Request $request)
+    {
+        $user_id = $request->user()->id;
+        return Ingredient::where('user_id', $user_id)->get();
+    }
     public function store(Request $request)
     {
+        $user_id = $request->user()->id;
         $fields = $request->validate([
             'name' => 'required|string',
         ]);
 
-        $ingredient = Ingredient::create(['name' => $fields['name']]);
+        $ingredient = Ingredient::create(['name' => $fields['name'], 'user_id' => $user_id]);
 
         return response($ingredient, 201);
     }
