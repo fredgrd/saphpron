@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Ingredients
     Route::post('/ingredients', [IngredientController::class, 'store']);
+    Route::patch('/ingredients/{id}', [IngredientController::class, 'update']);
+    Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
 });
 
 Route::get('/recipes', function (Request $request) {
