@@ -23,7 +23,7 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Recipes
     Route::get('/recipes/{id}', [RecipeController::class, 'show']);
-    Route::get('/recipes/search/{keyword}', [RecipeController::class, 'search']);
+    Route::get('/recipes/search/{mode}', [RecipeController::class, 'search']);
     Route::post('/recipes', [RecipeController::class, 'storeRecipe']);
     Route::post('/recipes/ingredient', [RecipeController::class, 'storeIngredient']);
     Route::post('/recipes/step', [RecipeController::class, 'storeStep']);

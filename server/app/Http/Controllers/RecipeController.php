@@ -6,6 +6,7 @@ use App\Models\RecipeStep;
 use App\Models\RecipeIngredient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -39,17 +40,45 @@ class RecipeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the matching recipe.
      */
-    public function search(string $keyword)
-    {
-        $decodedKeyword = urldecode($keyword);
-        $recipes = Recipe::where(function ($query) use ($decodedKeyword) {
-            $query->where('name', 'ilike', '%' . $decodedKeyword . '%')
-                ->orWhere('description', 'ilike', '%' . $decodedKeyword . '%');
-        })->get();
 
-        return $recipes;
+    public function search(Request $request, string $mode)
+    {
+        if (!$request->has('q')) {
+            return response(['message' => 'Missing query'], 400);
+        }
+
+        $user_id = $request->user()->id;
+
+        // info: Search the recipes infos: name OR description
+        // ingrs: Search the recipes matching ingredients
+        switch ($mode) {
+            case ('info'):
+                $queryString = $request->query('q');
+
+                // SELECT * FROM recipes WHERE user_id=$user_id AND (WHERE name ILIKE query OR WHERE description ILIKE query)
+                // ILIKE is used because it is case insensitive
+                $recipes = Recipe::where('user_id', $user_id)
+                    ->where(function ($query) use ($queryString) {
+                        $query->where('name', 'ilike', '%' . $queryString . '%')
+                            ->orWhere('description', 'ilike', '%' . $queryString . '%');
+                    })->get();
+
+                return $recipes;
+
+            case ('ingrs'):
+                $query = $request->query('q');
+
+                $recipes = Recipe::where('user_id', $user_id)
+                    ->join('recipe_ingredients', 'recipe_ingredients.recipe_id', '=', 'recipes.id')
+                    ->join('ingredients', 'recipe_ingredients.ingredient_id', '=', 'ingredients.id')
+                    ->whereIn(DB::raw('LOWER(ingredients.name)'), array_map('strtolower', $query))
+                    ->select('recipes.id', 'recipes.name', 'recipes.description', 'recipes.prep_time', 'recipes.is_favourite', 'recipes.media_url')
+                    ->get();
+
+                return $recipes;
+        }
     }
 
     // RECIPE -------------------------------------------------------------------------
