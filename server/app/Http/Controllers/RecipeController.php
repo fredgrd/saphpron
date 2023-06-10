@@ -10,18 +10,40 @@ use Illuminate\Http\Request;
 class RecipeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the specified resource.
      */
-    public function index()
+    public function show(string $id)
     {
-        // Maybe Return the total count
-        // return Recipe.
+        $recipe = Recipe::select('id', 'name', 'description', 'prep_time', 'is_favourite', 'media_url')
+            ->find($id);
+
+        if (!$recipe) {
+            return response(["message" => "Recipe not found"], 404);
+        }
+
+        $ingredients = RecipeIngredient::where('recipe_id', $id)
+            ->join('ingredients', 'recipe_ingredients.ingredient_id', '=', 'ingredients.id')
+            ->select('recipe_ingredients.id', 'recipe_ingredients.ingredient_id', 'ingredients.name', 'recipe_ingredients.info',)
+            ->get();
+
+        $steps = RecipeStep::where('recipe_id', $id)
+            ->select('id', 'description', 'is_important')
+            ->get();
+
+
+        return response([
+            "recipe" => $recipe,
+            "ingredients" => $ingredients,
+            "steps" => $steps
+        ], 200);
     }
 
+    // RECIPE -------------------------------------------------------------------------
+
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created recipe in storage.
      */
-    public function store(Request $request)
+    public function storeRecipe(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|string',
@@ -29,12 +51,6 @@ class RecipeController extends Controller
             'prep_time' => 'required|integer',
             'is_favourite' => 'nullable|boolean',
             'media_url' => 'nullable|string',
-            'ingredients' => 'present|array', // Array can be empty
-            'ingredients.*.ingredient_id' => 'required|integer',
-            'ingredients.*.info' => 'nullable|string',
-            'steps' => 'present|array', // Array can be empty
-            'steps.*.description' => 'required|string',
-            'steps.*.is_important' => 'nullable|boolean',
         ]);
 
         // Create a recipe
@@ -48,48 +64,177 @@ class RecipeController extends Controller
             'user_id' => $user_id
         ]);
 
+        return response($recipe, 201);
+    }
+
+    /**
+     * Update the recipe.
+     */
+    public function updateRecipe(Request $request, string $id)
+    {
+        $fields = $request->validate([
+            'name' => 'nullable|string',
+            'description' => 'nullable|string',
+            'prep_time' => 'nullable|integer',
+            'is_favourite' => 'nullable|boolean',
+            'media_url' => 'nullable|string',
+        ]);
+
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return response(["message" => "Recipe not found"], 404);
+        }
+
+        $recipe->update($fields);
+
+        return response()->noContent();
+    }
+
+    /**
+     * Remove the specified recipe from storage.
+     */
+    public function destroyRecipe(string $id)
+    {
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return response(["message" => "Recipe not found"], 404);
+        }
+
+        $result = Recipe::destroy($id);
+
+        if ($result) {
+            return response()->noContent();
+        } else {
+            return response(["message" => "Recipe could not be delete"], 500);
+        }
+    }
+
+    // INGREDIENT -------------------------------------------------------------------------
+
+    /**
+     * Store a newly created recipe ingredient in storage.
+     */
+    public function storeIngredient(Request $request)
+    {
+        $fields = $request->validate([
+            'recipe_id' => 'required|integer',
+            'ingredient_id' => 'required|integer',
+            'info' => 'nullable|string',
+        ]);
+
         // Create the recipe ingredients
-        foreach ($fields['ingredients'] as $ingredient) {
-            RecipeIngredient::create([
-                'ingredient_id' => $ingredient['ingredient_id'],
-                'recipe_id' => $recipe->id,
-                'info' => isset($ingredient['info']) ? $ingredient['info'] : null
-            ]);
+        $ingredient = RecipeIngredient::create([
+            'ingredient_id' => $fields['ingredient_id'],
+            'recipe_id' => $fields['recipe_id'],
+            'info' => isset($fields['info']) ? $fields['info'] : null
+        ]);
+
+        return response($ingredient, 201);
+    }
+
+    /**
+     * Update the recipe ingredient.
+     */
+    public function updateIngredient(Request $request, string $id)
+    {
+        $fields = $request->validate([
+            'info' => 'required|string', // If you do not submit info then nothing to update
+        ]);
+
+        $ingredient = RecipeIngredient::find($id);
+
+        if (!$ingredient) {
+            return response(["message" => "Recipe ingredient not found"], 404);
         }
 
-        // Create the recipe steps
-        foreach ($fields['steps'] as $step) {
-            RecipeStep::create([
-                'description' => $step['description'],
-                'recipe_id' => $recipe->id,
-                'is_important' => isset($step['is_important']) ? $step['is_important'] : false,
-            ]);
+        $ingredient->update($fields);
+
+        return response()->noContent();
+    }
+
+    /**
+     * Remove the specified recipe ingredient from storage.
+     */
+    public function destroyIngredient(string $id)
+    {
+        $ingredient = RecipeIngredient::find($id);
+
+        if (!$ingredient) {
+            return response(["message" => "Recipe ingredient not found"], 404);
         }
 
-        return response(['message' => 'Recipe created!'], 201);
+        $result = RecipeIngredient::destroy($id);
+
+        if ($result) {
+            return response()->noContent();
+        } else {
+            return response(["message" => "Recipe ingredient could not be delete"], 500);
+        }
+    }
+
+    // STEP -------------------------------------------------------------------------
+
+    /**
+     * Store a newly created recipe step in storage.
+     */
+    public function storeStep(Request $request)
+    {
+        $fields = $request->validate([
+            'recipe_id' => 'required|integer',
+            'description' => 'required|string',
+            'is_important' => 'nullable|boolean',
+        ]);
+
+        // Create the recipe ingredients
+        $ingredient = RecipeStep::create([
+            'description' => $fields['description'],
+            'recipe_id' => $fields['recipe_id'],
+            'is_important' => isset($fields['is_important']) ? $fields['is_important'] : false,
+        ]);
+
+        return response($ingredient, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Update the recipe step.
      */
-    public function show(string $id)
+    public function updateStep(Request $request, string $id)
     {
-        //
+        $fields = $request->validate([
+            'description' => 'nullable|string',
+            'is_important' => 'nullable|boolean',
+        ]);
+
+        $step = RecipeStep::find($id);
+
+        if (!$step) {
+            return response(["message" => "Recipe step not found"], 404);
+        }
+
+        $step->update($fields);
+
+        return response()->noContent();
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified recipe step from storage.
      */
-    public function update(Request $request, string $id)
+    public function destroyStep(string $id)
     {
-        //
-    }
+        $step = RecipeStep::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if (!$step) {
+            return response(["message" => "Recipe step not found"], 404);
+        }
+
+        $result = RecipeStep::destroy($id);
+
+        if ($result) {
+            return response()->noContent();
+        } else {
+            return response(["message" => "Recipe step could not be delete"], 500);
+        }
     }
 }

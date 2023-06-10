@@ -9,6 +9,8 @@ class RecipeIngredient extends Model
 {
     use HasFactory;
 
+    protected $hidden = ["created_at", "updated_at"];
+
     protected $fillable = [
         'ingredient_id',
         'recipe_id',

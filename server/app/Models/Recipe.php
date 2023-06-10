@@ -9,6 +9,9 @@ class Recipe extends Model
 {
     use HasFactory;
 
+    // Hides fields from return
+    protected $hidden = ["created_at", "updated_at", "user_id"];
+
     protected $fillable = [
         'name',
         'description',
