@@ -1,0 +1,12 @@
+.app__loading {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app__loading__spinner-container {
+  height: 50px;
+  width: 50px;
+}

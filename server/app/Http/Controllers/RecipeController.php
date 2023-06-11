@@ -7,7 +7,6 @@ use App\Models\RecipeIngredient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use RuntimeException;
 use App\Services\UnsplashService;
 
 class RecipeController extends Controller
@@ -98,18 +97,17 @@ class RecipeController extends Controller
             'media_url' => 'nullable|string',
         ]);
 
+        // Fetches a media_url placeholder if not provided by the user
         if (!isset($fields['media_url'])) {
             $access_key = config('services.unsplash.access_key');
-
-            if (!$access_key) {
-                throw new RuntimeException(
-                    'The Unsplash Access Key must be added to env'
-                );
+            if ($access_key) {
+                $unsplashService = new UnsplashService($access_key);
+                $photo = $unsplashService->getPlaceholderPhoto();
+                $fields['media_url'] = $photo;
+            } else {
+                // TODO: Add fallback
+                $fields['media_url'] = '';
             }
-
-            $unsplashService = new UnsplashService($access_key);
-            $photo = $unsplashService->getPlaceholderPhoto();
-            $fields['media_url'] = $photo;
         }
 
         // Create a recipe

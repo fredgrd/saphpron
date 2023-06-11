@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+
+:root {
+  --primary-background: #fdf7e5;
+  --primary-text: #1a1a1a;
+  --primary-gray: #efeff0;
+  --primary-highlight: #FCCE61;
+
+  --error-text: #cb2e20;
+  --error-border: #ff5c4c;
+  --error-background: #ffe8e5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--primary-background);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

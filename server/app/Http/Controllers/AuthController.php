@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
+    public function fetch(Request $request)
+    {
+        $user_id = $request->user()->id;
+
+        $user = User::find($user_id);
+
+        if (!$user) {
+            return response(['message' => 'User not found!'], 404);
+        }
+
+        return response($user, 200);
+    }
     public function signup(Request $request)
     {
         $fields = $request->validate([
@@ -22,7 +35,7 @@ class AuthController extends Controller
             'password' => bcrypt($fields['password'])
         ]);
 
-        $token = $user->createToken('saphpron_auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         $response = [
             'user' => $user,
@@ -50,6 +63,15 @@ class AuthController extends Controller
         if (!Hash::check($fields['password'], $user->password)) {
             return response(['message' => 'Wrong password'], 401);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token,
+        ];
+
+        return response($response, 200);
     }
 
     public function signout(Request $request)

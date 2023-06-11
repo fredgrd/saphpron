@@ -1,0 +1,21 @@
+.bigbutton {
+  height: 40px;
+  padding: 0px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--primary-background);
+  border: 1px solid var(--primary-text);
+  border-radius: 24px;
+
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-text);
+
+  cursor: pointer;
+}
+
+.bigbutton:hover {
+  transform: scale(1.05, 1.05);
+}

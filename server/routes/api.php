@@ -18,9 +18,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/signin', [AuthController::class, 'signin']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Auth
+    Route::get('/user', [AuthController::class, 'fetch']);
+    Route::post('/signout', [AuthController::class, 'signout']);
+
     // Recipes
     Route::get('/recipes/{id}', [RecipeController::class, 'show']);
     Route::get('/recipes/search/{mode}', [RecipeController::class, 'search']);
@@ -39,14 +44,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/ingredients', [IngredientController::class, 'store']);
     Route::patch('/ingredients/{id}', [IngredientController::class, 'update']);
     Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
-});
-
-Route::get('/recipes', function (Request $request) {
-    return $request->value;
-});
-
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });
