@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/signout', [AuthController::class, 'signout']);
 
     // Recipes
+    Route::get('/recipes', [RecipeController::class, 'showAll']);
     Route::get('/recipes/{id}', [RecipeController::class, 'show']);
     Route::get('/recipes/search/{mode}', [RecipeController::class, 'search']);
     Route::post('/recipes', [RecipeController::class, 'storeRecipe']);

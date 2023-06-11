@@ -12,6 +12,7 @@ const SmallButton: React.FC<{
   const { selectedColor } = options || {
     selectedColor: '#EFEFEF',
   };
+
   return (
     <button
       className="smallbutton"

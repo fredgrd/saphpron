@@ -14,6 +14,21 @@ class RecipeController extends Controller
     /**
      * Display the specified resource.
      */
+    public function showAll(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $recipes = Recipe::where('user_id', $user_id)->get();
+
+        if (!$recipes) {
+            return response(["message" => "Recipes not found"], 404);
+        }
+
+        return response($recipes, 200);
+    }
+
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
         $recipe = Recipe::select('id', 'name', 'description', 'prep_time', 'is_favourite', 'media_url')
@@ -71,10 +86,11 @@ class RecipeController extends Controller
             case ('ingrs'):
                 $query = $request->query('q');
 
-                $recipes = Recipe::where('user_id', $user_id)
-                    ->join('recipe_ingredients', 'recipe_ingredients.recipe_id', '=', 'recipes.id')
+                $recipes = Recipe::join('recipe_ingredients', 'recipe_ingredients.recipe_id', '=', 'recipes.id')
                     ->join('ingredients', 'recipe_ingredients.ingredient_id', '=', 'ingredients.id')
-                    ->whereIn(DB::raw('LOWER(ingredients.name)'), array_map('strtolower', $query))
+                    ->where('recipes.user_id', $user_id)
+                    ->whereIn(DB::raw('LOWER(ingredients.name)'), array_map('strtolower', $query)) // Creates duplicates because it is running the where query on each ingredient
+                    ->groupBy('recipes.id')
                     ->select('recipes.id', 'recipes.name', 'recipes.description', 'recipes.prep_time', 'recipes.is_favourite', 'recipes.media_url')
                     ->get();
 

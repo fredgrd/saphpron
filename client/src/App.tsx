@@ -6,11 +6,12 @@ import './App.css';
 import VisitorApp from './features/visitor-app/visitor-app.feature';
 import Spinner from './components/spinner/spinner.component';
 import { UserContext } from './context/user.context';
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContext } from './context/tost.context';
 import { ToastState } from './models/toast.model';
 import Toast from './components/toast/toast.component';
 import Header from './components/header/header.component';
+import Board from './features/board/board.feature';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -66,7 +67,12 @@ function App() {
         {user ? (
           <BrowserRouter>
             <Header />
-            <Routes>{/* <Route path="/" element={} /> */}</Routes>
+            <div className="app">
+              <Routes>
+                <Route path="/" element={<Board />} />
+              </Routes>
+            </div>
+            {/* <div style={{ height: '60px', width: '100vw' }} /> */}
           </BrowserRouter>
         ) : (
           <VisitorApp />
