@@ -8,6 +8,7 @@ import { ToastContext } from '../../context/tost.context';
 import useClickOutside from '../../utils/useClickOutside';
 import FullscreenModal from '../modal/fullscreen-modal.component';
 import Search from '../../features/search/search.feature';
+import { useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
   const [showUserDropdown, setShowUserDropdown] = useState<boolean>(false);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useClickOutside(dropdownRef, () => setShowUserDropdown(false));
 
@@ -51,7 +53,11 @@ const Header: React.FC = () => {
   return (
     <>
       <div className="header">
-        <img className="header__logo" src={Logo} />
+        <img
+          className="header__logo"
+          src={Logo}
+          onClick={() => navigate('/')}
+        />
         <button className="header__search" onClick={() => setShowSearch(true)}>
           <span className="header__search__title">Search</span>
         </button>

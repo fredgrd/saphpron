@@ -16,3 +16,16 @@ export interface Ingredient {
   id: number;
   name: string;
 }
+
+export interface RecipeIngredient {
+  id: number;
+  ingredient_id: number;
+  name: string;
+  info: string;
+}
+
+export interface RecipeStep {
+  id: number;
+  description: string;
+  is_important: boolean;
+}

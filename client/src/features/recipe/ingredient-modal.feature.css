@@ -1,0 +1,75 @@
+.ingredientmodal {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredientmodal__background {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+.ingredientmodal__container {
+  z-index: 1;
+  width: 100%;
+  max-width: 500px;
+  padding: 25px;
+
+  background-color: var(--primary-background);
+  border-radius: 14px;
+}
+
+.ingredientmodal__ingredients__new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ingredientmodal__ingredients__new__btn {
+  margin-left: auto;
+  margin-top: 4px;
+  padding: 4px 10px;
+
+  background-color: var(--primary-background);
+  border: 1.5px solid var(--primary-text);
+  border-radius: 14px;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.ingredientmodal__ingredients-list {
+  display: flex;
+  height: 100px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 8px;
+  padding: 10px;
+
+  overflow-y: scroll;
+
+  border: 1.5px solid var(--primary-text);
+  border-radius: 14px;
+}
+
+.ingredientmodal__recipe-ingredient {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.ingredientmodal__recipe-ingredient__name {
+  margin-top: 4px;
+}

@@ -12,6 +12,7 @@ import { ToastState } from './models/toast.model';
 import Toast from './components/toast/toast.component';
 import Header from './components/header/header.component';
 import Board from './features/board/board.feature';
+import RecipeDetail from './features/recipe/recipe-detail.feature';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -70,6 +71,7 @@ function App() {
             <div className="app">
               <Routes>
                 <Route path="/" element={<Board />} />
+                <Route path="/recipe/:id" element={<RecipeDetail />} />
               </Routes>
             </div>
           </BrowserRouter>

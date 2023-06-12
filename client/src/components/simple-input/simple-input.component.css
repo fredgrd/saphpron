@@ -1,0 +1,32 @@
+.simpleinput {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.simpleinput__label {
+  margin-bottom: 4px;
+
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--primary-text);
+
+  cursor: pointer;
+}
+
+.simpleinput__input {
+  padding: 6px 14px;
+
+  background-color: var(--primary-background);
+  border: none;
+  outline: 1.5px solid var(--primary-text);
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--primary-text);
+}
+
+.simpleinput__input:focus {
+  outline: 1.5px solid var(--primary-highlight);
+}

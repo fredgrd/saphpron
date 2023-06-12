@@ -161,7 +161,7 @@ class RecipeController extends Controller
 
         $recipe->update($fields);
 
-        return response()->noContent();
+        return response($recipe, 201);
     }
 
     /**
@@ -261,13 +261,13 @@ class RecipeController extends Controller
         ]);
 
         // Create the recipe ingredients
-        $ingredient = RecipeStep::create([
+        $step = RecipeStep::create([
             'description' => $fields['description'],
             'recipe_id' => $fields['recipe_id'],
             'is_important' => isset($fields['is_important']) ? $fields['is_important'] : false,
         ]);
 
-        return response($ingredient, 201);
+        return response($step, 201);
     }
 
     /**
@@ -288,7 +288,7 @@ class RecipeController extends Controller
 
         $step->update($fields);
 
-        return response()->noContent();
+        return response($step, 201);
     }
 
     /**

@@ -27,7 +27,6 @@ class ApiService {
       });
 
       if (!response.ok) {
-        console.log(response);
         const error = await response.text();
         return { error };
       }
@@ -38,6 +37,42 @@ class ApiService {
     } catch (error) {
       const typeError = error as TypeError;
       return { error: typeError.message };
+    }
+  }
+
+  async simpleFetch(
+    endpoint: string,
+    options?: {
+      body?: any;
+      method?: string;
+    }
+  ): Promise<{ success: boolean; error?: string }> {
+    const { body, method } = options || {
+      body: undefined,
+      method: 'GET',
+    };
+
+    const token = localStorage.getItem('auth_token');
+
+    try {
+      const response = await fetch(this.baseUrl + endpoint, {
+        method: method,
+        mode: 'cors',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: body && JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        return { success: false, error };
+      } else {
+        return { success: true };
+      }
+    } catch (error) {
+      const typeError = error as TypeError;
+      return { success: false, error: typeError.message };
     }
   }
 }
