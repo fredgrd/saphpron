@@ -72,7 +72,6 @@ function App() {
                 <Route path="/" element={<Board />} />
               </Routes>
             </div>
-            {/* <div style={{ height: '60px', width: '100vw' }} /> */}
           </BrowserRouter>
         ) : (
           <VisitorApp />

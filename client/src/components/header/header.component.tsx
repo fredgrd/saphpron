@@ -6,11 +6,14 @@ import Logo from '../../assets/logo.png';
 import { ReactComponent as ArrowDown } from '../../assets/arrow-down.svg';
 import { ToastContext } from '../../context/tost.context';
 import useClickOutside from '../../utils/useClickOutside';
+import FullscreenModal from '../modal/fullscreen-modal.component';
+import Search from '../../features/search/search.feature';
 
 const Header: React.FC = () => {
   const userContext = useContext(UserContext);
   const toastContext = useContext(ToastContext);
   const [showUserDropdown, setShowUserDropdown] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setShowUserDropdown(false));
@@ -46,39 +49,42 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div className="header">
-      <img className="header__logo" src={Logo} />
-      <button className="header__search">
-        <span className="header__search__title">Search</span>
-      </button>
-      <div className="header__user" ref={dropdownRef}>
-        <button
-          className="header__user__button"
-          onClick={() => setShowUserDropdown((state) => !state)}
-        >
-          {userContext.user?.name}
-          <ArrowDown
-            fill="#1A1A1A"
-            style={{
-              transform: showUserDropdown ? 'rotate(180deg)' : undefined,
-            }}
-          />
+    <>
+      <div className="header">
+        <img className="header__logo" src={Logo} />
+        <button className="header__search" onClick={() => setShowSearch(true)}>
+          <span className="header__search__title">Search</span>
         </button>
-        {showUserDropdown && (
-          <div className="header__user__dropdown">
-            <span className="header__user__dropdown__email">
-              {userContext.user?.email}
-            </span>
-            <button
-              className="header__user__dropdown__signout"
-              onClick={onSignout}
-            >
-              SIGN OUT
-            </button>
-          </div>
-        )}
+        <div className="header__user" ref={dropdownRef}>
+          <button
+            className="header__user__button"
+            onClick={() => setShowUserDropdown((state) => !state)}
+          >
+            {userContext.user?.name}
+            <ArrowDown
+              fill="#1A1A1A"
+              style={{
+                transform: showUserDropdown ? 'rotate(180deg)' : undefined,
+              }}
+            />
+          </button>
+          {showUserDropdown && (
+            <div className="header__user__dropdown">
+              <span className="header__user__dropdown__email">
+                {userContext.user?.email}
+              </span>
+              <button
+                className="header__user__dropdown__signout"
+                onClick={onSignout}
+              >
+                SIGN OUT
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Search isVisible={showSearch} onClose={() => setShowSearch(false)} />
+    </>
   );
 };
 
