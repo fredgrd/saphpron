@@ -25,11 +25,11 @@ With Saphpron, you can effortlessly store and browse your recipes on the fly, tr
 ### Auth Flow
 ![message](showcase/saphpron_auth.gif)
 
+### Create Recipe
+![message](showcase/saphpron_create-recipe.gif)
+
 ### Search
 ![message](showcase/saphpron_search.gif)
 
 ### Sort
 ![message](showcase/saphpron_sort.gif)
-
-### Create Recipe
-![message](showcase/saphpron_create-recipe.gif)
