@@ -1,8 +1,8 @@
 import ApiService from './api.service';
 
 class CloudinaryService {
-  private cloudName = 'degzh4mwt';
-  private uploadPreset = 'oedhje2a';
+  private cloudName = process.env.CLOUDINARY_CLOUD_NAME || '';
+  private uploadPreset = process.env.CLOUDINARY_CLOUD_UPLOAD_PRESET || '';
 
   async uploadImage(image: File): Promise<{ url?: string; error?: string }> {
     const url = `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`;
