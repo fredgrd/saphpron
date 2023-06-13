@@ -114,17 +114,17 @@ class RecipeController extends Controller
         ]);
 
         // Fetches a media_url placeholder if not provided by the user
-        if (!isset($fields['media_url'])) {
-            $access_key = config('services.unsplash.access_key');
-            if ($access_key) {
-                $unsplashService = new UnsplashService($access_key);
-                $photo = $unsplashService->getPlaceholderPhoto();
-                $fields['media_url'] = $photo;
-            } else {
-                // TODO: Add fallback
-                $fields['media_url'] = '';
-            }
-        }
+        // if (!isset($fields['media_url'])) {
+        //     $access_key = config('services.unsplash.access_key');
+        //     if ($access_key) {
+        //         $unsplashService = new UnsplashService($access_key);
+        //         $photo = $unsplashService->getPlaceholderPhoto();
+        //         $fields['media_url'] = $photo;
+        //     } else {
+        //         // TODO: Add fallback
+        //         $fields['media_url'] = '';
+        //     }
+        // }
 
         // Create a recipe
         $user_id = $request->user()->id;
