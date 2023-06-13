@@ -202,6 +202,7 @@ class RecipeService extends ApiService {
     ingredientId: number,
     info: string
   ): Promise<{ success: boolean; error?: string }> {
+    console.log('ingredient', ingredientId);
     const { success, error } = await this.simpleFetch(
       `recipes/ingredient/${ingredientId}`,
       {
@@ -238,15 +239,12 @@ class RecipeService extends ApiService {
     step?: RecipeStep;
     error?: string;
   }> {
-    const { result, error } = await this.fetch<RecipeStep>(
-      'recipes/step',
-      {
-        method: 'POST',
-        body: {
-          ...input,
-        },
-      }
-    );
+    const { result, error } = await this.fetch<RecipeStep>('recipes/step', {
+      method: 'POST',
+      body: {
+        ...input,
+      },
+    });
 
     if (error) {
       return { error };

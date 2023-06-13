@@ -59,10 +59,12 @@ const IngredientModal: React.FC<{
     );
 
     if (error || !ingredient) {
+      setLoading(false);
       console.log('IngredientModal/onAdd error: Could not add ingredient');
       return;
     }
 
+    setLoading(false);
     setNewIngredientName('');
     const updateIngredients = ingredients;
     updateIngredients.push(ingredient);
@@ -80,6 +82,7 @@ const IngredientModal: React.FC<{
     });
 
     if (error || !ingredient) {
+      setLoading(false);
       console.log('IngredientModal/onAdd error: Could not add ingredient');
       return;
     }

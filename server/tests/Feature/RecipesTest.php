@@ -301,7 +301,7 @@ class RecipesTest extends TestCase
 
         $this
             ->json('patch', '/api/recipes/ingredient/1', ['info' => 'Test Done'], ['Authorization' => 'Bearer ' . $token, 'Accept' => 'application/json'])
-            ->assertStatus(204);
+            ->assertStatus(201);
     }
 
     public function testSuccessfulDeleteRecipeIngredient()

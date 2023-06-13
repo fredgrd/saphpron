@@ -65,7 +65,7 @@ const RecipeDetail: React.FC = () => {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [id]);
 
   const updateIngredient = (ingredient: RecipeIngredient) => {
     const updateIngredients: RecipeIngredient[] = deepCopy(ingredients);

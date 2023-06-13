@@ -224,7 +224,7 @@ class RecipeController extends Controller
 
         $ingredient->update($fields);
 
-        return response()->noContent();
+        return response($ingredient, 201);
     }
 
     /**

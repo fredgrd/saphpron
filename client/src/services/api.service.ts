@@ -55,10 +55,13 @@ class ApiService {
     const token = localStorage.getItem('auth_token');
 
     try {
+      console.log("ADDRESS", this.baseUrl + endpoint)
+      console.log("ADDRESS", method)
       const response = await fetch(this.baseUrl + endpoint, {
         method: method,
         mode: 'cors',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: body && JSON.stringify(body),
