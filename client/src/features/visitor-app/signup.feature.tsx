@@ -54,7 +54,7 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='signupfeature'>
       <div style={{ marginBottom: '6px' }}>
         <AuthInput
           value={name}
