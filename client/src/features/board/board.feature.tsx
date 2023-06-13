@@ -12,7 +12,6 @@ import SmallButton from '../../components/small-button/small-button.component';
 import BigButton from '../../components/big-button/big-button.component';
 import { deepCopy } from '../../utils/memory';
 import Preview from './preview.feature';
-import { useNavigate } from 'react-router-dom';
 
 interface BoardFilters {
   favourite: 'favourite' | 'unfavourite' | 'all';
@@ -35,7 +34,6 @@ const Board: React.FC = () => {
   const [ingredientsLoading, setIngredientsLoading] = useState<boolean>(false);
   const [recipeService, _] = useState<RecipeService>(new RecipeService());
   const toastContext = useContext(ToastContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRecipes();
@@ -169,12 +167,12 @@ const Board: React.FC = () => {
   return (
     <div className="board">
       <div className="board__container">
-        <button
+        <a
           className="board__recipe-new"
-          onClick={() => navigate('/recipe/new')}
+          href='/recipe/new'
         >
           📝
-        </button>
+        </a>
         <div className="board__filters">
           <div className="board__filters__section">
             <span>FAVOURITES</span>
