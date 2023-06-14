@@ -41,10 +41,6 @@ const Board: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log(selectedIngredients);
-  }, [selectedIngredients]);
-
-  useEffect(() => {
     filterRecipes();
   }, [filters, recipes]);
 
@@ -135,6 +131,7 @@ const Board: React.FC = () => {
       return;
     }
 
+    // Construct the array based query
     const query: string = selectedIngredients.reduce((prev, curr) => {
       const name = curr.name.replace(' ', '+');
       return prev + `${prev.length > 0 ? '&' : ''}q[]=${name}`;

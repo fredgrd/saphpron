@@ -6,7 +6,6 @@ import Logo from '../../assets/logo.png';
 import { ReactComponent as ArrowDown } from '../../assets/arrow-down.svg';
 import { ToastContext } from '../../context/tost.context';
 import useClickOutside from '../../utils/useClickOutside';
-import FullscreenModal from '../modal/fullscreen-modal.component';
 import Search from '../../features/search/search.feature';
 import { useNavigate } from 'react-router-dom';
 
