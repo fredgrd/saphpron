@@ -14,6 +14,7 @@ With Saphpron, you can effortlessly store and browse your recipes on the fly, tr
 - Laravel PHP
 - Laravel Sanctum
 - Unsplash
+- PostgreSQL
 
 ### Frontend 
 - React 
